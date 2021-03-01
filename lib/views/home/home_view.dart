@@ -21,28 +21,32 @@ class ReposList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final reposListState = useProvider(homeStateNotifierProvider.state);
-    return reposListState.when(
-      data: (repos) => repos.isEmpty
-          ? Center(
-              child: Text("No Repos!"),
-            )
-          : ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Text(repos[index].name),
-                  trailing: Text(
-                      'Created at ${DateFormat('yMMMd').format(repos[index].createdAt)}'),
-                  onTap: () =>
-                      showStarsToast(repos[index].stargazerCount, context),
-                  onLongPress: () =>
-                      showStarsToast(repos[index].stargazerCount, context),
-                );
-              },
-              itemCount: repos.length,
-            ),
-      loading: () => CircularProgressIndicator(),
-      error: (error, _) => Text("$error"),
-      // error: (error, _),
+    return RefreshIndicator(
+      onRefresh: () async =>
+          useProvider(homeStateNotifierProvider).retrieveRepos(),
+      child: reposListState.when(
+        data: (repos) => repos.isEmpty
+            ? Center(
+                child: Text("No Repos!"),
+              )
+            : ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: Text(repos[index].name),
+                    trailing: Text(
+                        'Created at ${DateFormat('yMMMd').format(repos[index].createdAt)}'),
+                    onTap: () =>
+                        showStarsToast(repos[index].stargazerCount, context),
+                    onLongPress: () =>
+                        showStarsToast(repos[index].stargazerCount, context),
+                  );
+                },
+                itemCount: repos.length,
+              ),
+        loading: () => CircularProgressIndicator(),
+        error: (error, _) => Text("$error"),
+        // error: (error, _),
+      ),
     );
   }
 
