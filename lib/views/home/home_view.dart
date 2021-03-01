@@ -42,7 +42,7 @@ class ReposList extends HookWidget {
                 },
                 itemCount: repos.length,
               ),
-        loading: () => CircularProgressIndicator(),
+        loading: () => Center(child: CircularProgressIndicator()),
         error: (error, _) => Text("$error"),
         // error: (error, _),
       ),
@@ -50,7 +50,7 @@ class ReposList extends HookWidget {
   }
 
   Future<void> _pullRefresh(BuildContext context) async {
-    context.read(homeStateNotifierProvider).retrieveRepos();
+    context.read(homeStateNotifierProvider).retrieveRepos(isRefreshing: true);
   }
 
   void showStarsToast(int stars, BuildContext context) {
