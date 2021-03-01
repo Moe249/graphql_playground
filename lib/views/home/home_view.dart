@@ -22,8 +22,7 @@ class ReposList extends HookWidget {
   Widget build(BuildContext context) {
     final reposListState = useProvider(homeStateNotifierProvider.state);
     return RefreshIndicator(
-      onRefresh: () async =>
-          useProvider(homeStateNotifierProvider).retrieveRepos(),
+      onRefresh: () => _pullRefresh(context),
       child: reposListState.when(
         data: (repos) => repos.isEmpty
             ? Center(
@@ -48,6 +47,10 @@ class ReposList extends HookWidget {
         // error: (error, _),
       ),
     );
+  }
+
+  Future<void> _pullRefresh(BuildContext context) async {
+    context.read(homeStateNotifierProvider).retrieveRepos();
   }
 
   void showStarsToast(int stars, BuildContext context) {
