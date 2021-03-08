@@ -44,7 +44,6 @@ class ReposList extends HookWidget {
               ),
         loading: () => Center(child: CircularProgressIndicator()),
         error: (error, _) => Text("$error"),
-        // error: (error, _),
       ),
     );
   }
